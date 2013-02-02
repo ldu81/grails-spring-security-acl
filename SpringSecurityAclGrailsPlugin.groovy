@@ -76,7 +76,7 @@ import org.springframework.security.core.authority.GrantedAuthorityImpl
  */
 class SpringSecurityAclGrailsPlugin {
 
-	String version = '1.2.0'
+	String version = '1.1.7'
 	String grailsVersion = '1.3 > *'
 	List loadAfter = ['springSecurityCore']
 	List pluginExcludes = [
@@ -206,7 +206,6 @@ class SpringSecurityAclGrailsPlugin {
 			parameterNameDiscoverer = ref('parameterNameDiscoverer')
 			permissionEvaluator = ref('permissionEvaluator')
 			roleHierarchy = ref('roleHierarchy')
-			trustResolver = ref('authenticationTrustResolver')
 		}
 	}
 
@@ -243,7 +242,7 @@ class SpringSecurityAclGrailsPlugin {
 
 	private boolean serviceIsAnnotated(Class clazz) {
 		for (annotation in [GrailsSecured, SpringSecured, PreAuthorize,
-		                    PreFilter, PostAuthorize, PostFilter]) {
+							PreFilter, PostAuthorize, PostFilter]) {
 			if (serviceIsAnnotated(clazz, annotation)) {
 				return true
 			}
@@ -272,9 +271,9 @@ class SpringSecurityAclGrailsPlugin {
 		groovyAwareAclVoter(GroovyAwareAclVoter)
 
 		def aclAccessDecisionManagerDecisionVoters = [ref('roleVoter'),
-		                                              ref('authenticatedVoter'),
-		                                              ref('preInvocationVoter'),
-		                                              ref('groovyAwareAclVoter')]
+													  ref('authenticatedVoter'),
+													  ref('preInvocationVoter'),
+													  ref('groovyAwareAclVoter')]
 
 		voterConfig.each { beanName, voterData ->
 			"$beanName"(AclEntryVoter, ref('aclService'), voterData.configAttribute, voterData.permissions) {
@@ -334,8 +333,8 @@ class SpringSecurityAclGrailsPlugin {
 		springSecuredAnnotationSecurityMetadataSource(SpringSecuredAnnotationSecurityMetadataSource)
 
 		def metadataSources = [ref('prePostAnnotationSecurityMetadataSource'),
-		                       ref('springSecuredAnnotationSecurityMetadataSource'),
-		                       ref('serviceStaticMethodSecurityMetadataSource')]
+							   ref('springSecuredAnnotationSecurityMetadataSource'),
+							   ref('serviceStaticMethodSecurityMetadataSource')]
 		aclSecurityMetadataSource(ProxyAwareDelegatingMethodSecurityMetadataSource) {
 			methodSecurityMetadataSources = metadataSources
 		}
@@ -343,8 +342,8 @@ class SpringSecurityAclGrailsPlugin {
 		postInvocationProvider(PostInvocationAdviceProvider, ref('postInvocationAdvice'))
 		afterInvocationManager(AfterInvocationProviderManager) {
 			providers = [ref('postInvocationProvider'),
-			             ref('afterAclRead'),
-			             ref('afterAclCollectionRead')]
+						 ref('afterAclRead'),
+						 ref('afterAclCollectionRead')]
 		}
 
 		methodSecurityInterceptor(MethodSecurityInterceptor) {
@@ -404,11 +403,11 @@ class SpringSecurityAclGrailsPlugin {
 
 		@AclVoters([
 			@AclVoter(name='aclReportWriteVoter',
-			          configAttribute='ACL_REPORT_WRITE',
-			          permissions=['ADMINISTRATION', 'WRITE']),
+					  configAttribute='ACL_REPORT_WRITE',
+					  permissions=['ADMINISTRATION', 'WRITE']),
 			@AclVoter(name='aclReportDeleteVoter',
-			          configAttribute='ACL_REPORT_DELETE',
-			          permissions=['ADMINISTRATION', 'DELETE'])
+					  configAttribute='ACL_REPORT_DELETE',
+					  permissions=['ADMINISTRATION', 'DELETE'])
 		])
 
 		In addition you can declare a config attribute 'acl.voters':
@@ -418,14 +417,14 @@ class SpringSecurityAclGrailsPlugin {
 				domainObjectClass: Report,
 				configAttribute: 'ACL_REPORT_WRITE',
 				permissions: [BasePermission.ADMINISTRATION,
-				              BasePermission.WRITE]
+							  BasePermission.WRITE]
 			],
 
 			aclReportDeleteVoter: [
 				domainObjectClass: Report,
 				configAttribute: 'ACL_REPORT_DELETE',
 				permissions: [BasePermission.ADMINISTRATION,
-				              BasePermission.DELETE]
+							  BasePermission.DELETE]
 			]
 		]
 		*/
@@ -439,8 +438,8 @@ class SpringSecurityAclGrailsPlugin {
 					permissions << BasePermission."$permissionName"
 				}
 				config[annotation.name()] = [configAttribute: annotation.configAttribute(),
-				                             domainObjectClass: dc.clazz,
-				                             permissions: permissions]
+											 domainObjectClass: dc.clazz,
+											 permissions: permissions]
 			}
 		}
 
