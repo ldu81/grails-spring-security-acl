@@ -31,7 +31,7 @@ import org.springframework.security.core.Authentication;
  *
  * @author <a href='mailto:burt@burtbeckwith.com'>Burt Beckwith</a>
  */
-public class GroovyAwareAclVoter implements AccessDecisionVoter {
+public class GroovyAwareAclVoter implements AccessDecisionVoter<Object> {
 
 	private static final List<String> NON_SECURABLE_METHODS = new ArrayList<String>(Arrays.asList(
 			"invokeMethod", "getMetaClass", "setMetaClass", "getProperty", "setProperty",

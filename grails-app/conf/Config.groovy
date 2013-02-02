@@ -4,3 +4,5 @@ grails.doc.title = 'Spring Security ACL'
 
 // for testing
 grails.plugins.springsecurity.useRunAs = true
+grails.views.default.codec="none" // none, html, base64
+grails.views.gsp.encoding="UTF-8"
