@@ -184,9 +184,10 @@ class GormAclLookupStrategy implements LookupStrategy {
 //		List acesNew = []
 		result.@aces.clear()
 		for (AccessControlEntryImpl ace in inputAcl.@aces) {
-			ace.@acl = result
+			AccessControlEntryImpl newAce = new AccessControlEntryImpl(ace.getId(), result, ace.getSid(), ace.getPermission(), ace.isGranting(), ace.isAuditSuccess(), ace.isAuditFailure())
+//			ace.@acl = result
 //			acesNew << ace
-			result.@aces << ace
+			result.@aces << newAce
 		}
 //		result.@aces = acesNew
 
