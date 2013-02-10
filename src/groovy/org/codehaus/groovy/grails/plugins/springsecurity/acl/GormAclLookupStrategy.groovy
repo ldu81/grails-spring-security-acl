@@ -180,10 +180,13 @@ class GormAclLookupStrategy implements LookupStrategy {
 				aclAuthorizationStrategy, auditLogger, parent, null,
 				inputAcl.isEntriesInheriting(), inputAcl.owner)
 
-		Integer index = 0;
-		for (AccessControlEntryImpl ace in inputAcl.getEntries()) {
-			result.insertAce(index++, ace.getPermission(), ace.getSid(), ace.isGranting())
+		
+		List acesNew = []
+		for (AccessControlEntryImpl ace in inputAcl.@aces) {
+			ace.@acl = result
+			acesNew << ace
 		}
+		result.@aces = acesNew
 
 		return result
 	}
@@ -246,8 +249,8 @@ class GormAclLookupStrategy implements LookupStrategy {
 			acls[id] = acl
 		}
 
-		//List aces = acl.@aces
-		Integer index = 0;
+		
+		List aces = acl.@aces
 		for (AclEntry entry in entries) {
 			// Add an extra ACE to the ACL (ORDER BY maintains the ACE list order)
 			// It is permissable to have no ACEs in an ACL
@@ -263,9 +266,8 @@ class GormAclLookupStrategy implements LookupStrategy {
 						entry.granting, entry.auditSuccess, entry.auditFailure)
 
 				// Add the ACE if it doesn't already exist in the ACL.aces field
-				if (!acl.getEntries().contains(ace)) {
-					//aces << ace
-					acl.insertAce(index++, ace.getPermission(), ace.getSid(), ace.isGranting())
+				if (!aces.contains(ace)) {
+					aces << ace
 				}
 			}
 		}
