@@ -181,12 +181,14 @@ class GormAclLookupStrategy implements LookupStrategy {
 				inputAcl.isEntriesInheriting(), inputAcl.owner)
 
 		
-		List acesNew = []
+//		List acesNew = []
+		result.@aces.clear()
 		for (AccessControlEntryImpl ace in inputAcl.@aces) {
 			ace.@acl = result
-			acesNew << ace
+//			acesNew << ace
+			result.@aces << ace
 		}
-		result.@aces = acesNew
+//		result.@aces = acesNew
 
 		return result
 	}
